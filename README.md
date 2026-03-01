@@ -13,7 +13,7 @@ This repo contains slash commands that automate product and engineering workflow
 
 ## Prerequisites
 
-1. **Claude Code** — Install from [claude.ai/code](https://claude.ai/code) or via `npm install -g @anthropic-ai/claude-code`
+1. **Claude Code** — Install from [claude.ai/code](https://claude.ai/code)
 2. **MCP Plugins** — These commands use external services via MCP (Model Context Protocol):
    - **Asana MCP** — Required for `/refine-tickets`. Install via Claude Code's plugin marketplace (`/plugins` → search "asana")
    - **Linear MCP** — Required for `/eng-team`. Install via plugin marketplace (`/plugins` → search "linear")
@@ -28,7 +28,7 @@ This is the easiest way. It adds the CoolAssTools marketplace to Claude Code so 
 1. Open Claude Code
 2. Run `/plugins`
 3. Choose "Add marketplace"
-4. Enter: `CoolAssTools/CoolAssTools`
+4. Enter: `mjn298/CoolAssTools`
 5. Install `cool-workflows` from the marketplace
 
 That's it. Both `/refine-tickets` and `/eng-team` are now available. Updates to the repo are picked up automatically.
@@ -38,7 +38,7 @@ That's it. Both `/refine-tickets` and `/eng-team` are now available. Updates to 
 If you prefer a local checkout:
 
 ```bash
-git clone https://github.com/CoolAssTools/CoolAssTools.git
+git clone https://github.com/mjn298/CoolAssTools.git
 ```
 
 Then in Claude Code:
