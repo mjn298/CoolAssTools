@@ -31,9 +31,11 @@ To get the team's internal ID (required for creating issues), call `mcp__claude_
 
 **Step 3: Ensure required labels exist in the Linear team.**
 
-Call `mcp__claude_ai_Linear__create_issue_label` for each of the following labels. Pass the team ID you resolved above. If a label already exists, the API call is safe — just proceed.
+First, fetch the current label list via `mcp__claude_ai_Linear__list_issue_labels` (filtered by teamId) and build a map of `labelName → labelId`.
 
-Labels to ensure exist:
+Check whether each of the following labels already exists in that map. Only create labels that are missing — call `mcp__claude_ai_Linear__create_issue_label` for each missing label, passing the team ID you resolved above.
+
+Required labels:
 - `ready_for_eng_design` (color: `#F2C94C`)
 - `ready_for_implementation` (color: `#27AE60`)
 - `schema_change` (color: `#EB5757`)
@@ -41,7 +43,7 @@ Labels to ensure exist:
 - `frontend` (color: `#9B51E0`)
 - `e2e` (color: `#56CCF2`)
 
-After ensuring labels exist, fetch the current label list via `mcp__claude_ai_Linear__list_issue_labels` (filtered by teamId) and build a map of `labelName → labelId`. You will pass this map to agents so they can reference label IDs directly without re-fetching.
+After creating any missing labels, re-fetch the label list and rebuild the `labelName → labelId` map. You will pass this map to agents so they can reference label IDs directly without re-fetching.
 
 Also call `mcp__claude_ai_Linear__list_issue_statuses` (filtered by teamId) and resolve the "Done" state ID. Store this ID — you will pass it to all agents (EM, BEEng, FEEng) in their prompts so they can mark tickets Done without an extra API call.
 
