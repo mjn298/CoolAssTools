@@ -1,0 +1,7 @@
+{
+  "name": "cool-workflows",
+  "description": "Shared workflows: ticket refinement (/refine-tickets) and full engineering team orchestration (/eng-team)",
+  "author": {
+    "name": "CoolAssTools"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "cool-ass-tools",
+  "description": "Shared workflows for product management and engineering team orchestration",
+  "owner": {
+    "name": "CoolAssTools"
+  },
+  "plugins": [
+    {
+      "name": "cool-workflows",
+      "description": "Ticket refinement (/refine-tickets) and full engineering team orchestration (/eng-team)",
+      "version": "1.0.0",
+      "author": {
+        "name": "CoolAssTools"
+      },
+      "source": "./plugins/cool-workflows",
+      "category": "productivity"
+    }
+  ]
+}
