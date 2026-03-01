@@ -70,6 +70,8 @@ Include in the agent's prompt:
 
 Wait for the ProductMgr to send you a completion message via SendMessage. The message will contain the Linear project ID and the list of user story ticket IDs + titles.
 
+**Optional: Background SWA exploration.** If the feature brief is specific enough, also spawn SWA in the background at this point with `run_in_background: true` and a prompt limited to "Explore the codebase architecture relevant to this feature domain. Do NOT create any tickets or make design decisions yet — only build context. Report your findings when done." This gives SWA a head start so Phase 2 begins faster. If scope changes drastically during ProductMgr's discovery, the exploration may be partially wasted — this is an acceptable trade-off.
+
 **Step 6: USER GATE — User story approval.**
 
 Using AskUserQuestion (or by presenting to the user directly), show:
@@ -84,6 +86,13 @@ If the user requests revisions:
 - Repeat this gate
 
 If approved, proceed to Phase 2.
+
+**Step 6b: Update Linear project description.**
+
+After the user approves the user stories, update the Linear project description with the full context:
+- Call `mcp__claude_ai_Linear__save_project` (using the projectId from ProductMgr) to update the description
+- Include: the original feature brief, user answers to ProductMgr's clarifying questions (if visible), and the final list of approved user story titles
+- This ensures the Linear project serves as a single source of truth for anyone reviewing the feature later
 
 ---
 
@@ -118,6 +127,8 @@ Spawn TWO agents simultaneously in the same team:
   - Phase indicator: "You are in Phase 2 (Architecture). Engage with SWA via SendMessage to review and validate the architecture plan. Trace the expected changes through the codebase using subagents. When SWA's architecture looks concrete and complete, send me (the lead) a completion message saying Phase 2 is done."
 
 Wait for BOTH SWA and SWEL to send you completion messages before proceeding.
+
+**Revision tracking:** If the user requests architecture revisions at the gate, increment a revision counter (starting at v1). Include the revision version in all messages to SWA and SWEL (e.g., "Architecture revision v2: [instructions]"). Do NOT present the user gate until BOTH agents have sent completion messages referencing the SAME revision version.
 
 **Step 8: USER GATE — Architecture approval.**
 
@@ -228,3 +239,4 @@ When all tickets are complete and branches are merged:
 - **All agents MUST report to team-lead immediately when done.** Every agent prompt must include: "When you are done, your FIRST action is to send a completion message to team-lead via SendMessage."
 - **Engineers MUST update Linear ticket status to Done** when completing a ticket. Don't just report via message — call `mcp__claude_ai_Linear__save_issue` to mark the ticket Done.
 - **Resolve the "Done" status ID early.** In Step 3 (alongside label setup), also call `mcp__claude_ai_Linear__list_issue_statuses` and resolve the "Done" state ID. Pass this to all agents in their prompts so they can update tickets without an extra API call.
+- **Ignore idle notifications unless you need to assign work.** Agents going idle between turns is normal and expected. Do not process or respond to idle notifications unless you have pending work to assign to that agent.

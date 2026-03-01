@@ -130,3 +130,6 @@ You will remain available in case the lead asks you to revise tickets based on u
 - **Avoid technical details in stories.** Stories describe *what* the user can do, not *how* to implement it. Engineering design happens later.
 - **Think about edge cases.** Empty states, error conditions, permission boundaries, and multi-tenant data isolation are all fair game for acceptance criteria.
 - **TDD requirements are mandatory.** Every ticket must include TDD guidance because the engineering team follows strict Red/Green TDD.
+- **NEVER create tickets with TBD or placeholder content.** If you don't have enough information to write specific acceptance criteria, ask the user first via AskUserQuestion. All questions must be resolved BEFORE ticket creation, not after.
+- **Batch all clarifying questions.** Use 1-2 AskUserQuestion calls to ask ALL scoping questions upfront — do not discover questions iteratively across multiple rounds.
+- **Flag scope-uncertain stories.** If a user story has open questions that could significantly change its scope (e.g., "what checks should be included?" or "blocking vs advisory?"), flag it in the ticket description with a `⚠️ Scope TBD` marker and surface ALL such questions to the user via AskUserQuestion BEFORE creating the ticket. Do not create tickets with unresolved scope questions.

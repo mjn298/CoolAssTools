@@ -36,7 +36,23 @@ After subagents complete, synthesize their findings into an architectural unders
 
 ---
 
-## Step 2: Design the Architecture
+## Step 2: Surface Key Design Choices
+
+Before committing to an architecture, identify key design decision points where multiple valid approaches exist. Present these to the user via `AskUserQuestion` so they can express preferences upfront.
+
+Examples of design choices to surface:
+- Data modeling approach (e.g., enum vs tags vs lookup table)
+- API style for new endpoints (e.g., REST vs RPC, polling vs real-time)
+- State management approach on the frontend
+- Integration strategy with existing systems
+
+Format each choice as an AskUserQuestion option with 2-4 alternatives and brief trade-off descriptions. This front-loads user preferences and prevents expensive revision loops after the architecture is drafted.
+
+Only proceed to architecture design once the user has responded to all key choices.
+
+---
+
+## Step 3: Design the Architecture
 
 Based on the feature brief, user stories, and codebase exploration, design a comprehensive technical architecture. Address:
 
@@ -70,7 +86,7 @@ Based on the feature brief, user stories, and codebase exploration, design a com
 
 ---
 
-## Step 3: Communicate with SWEL
+## Step 4: Communicate with SWEL
 
 Send your architectural design to SWEL via SendMessage:
 
@@ -78,6 +94,8 @@ Send your architectural design to SWEL via SendMessage:
 Architecture draft ready for review.
 
 [Paste full architecture design here]
+
+- User's stated preferences: [list the choices the user made in Step 2]
 
 Key questions for you:
 - [Specific question about codebase reality you're uncertain about]
@@ -90,7 +108,7 @@ Engage in back-and-forth with SWEL (you may receive several messages). Refine yo
 
 ---
 
-## Step 4: Create the Architecture Ticket in Linear
+## Step 5: Create the Architecture Ticket in Linear
 
 Once the architecture is finalized (confirmed by SWEL), call `mcp__claude_ai_Linear__save_issue`:
 
@@ -150,7 +168,7 @@ priority: 1  (urgent — must be understood before implementation)
 
 ---
 
-## Step 5: Create Schema Change Ticket (if needed)
+## Step 6: Create Schema Change Ticket (if needed)
 
 If there are ANY database schema changes (new tables, new columns, modified columns, new indices), create a single "schema_change" ticket:
 
@@ -205,7 +223,7 @@ Note the schema_change ticket ID — you will report it to the lead.
 
 ---
 
-## Step 6: Report to Lead
+## Step 7: Report to Lead
 
 Send a completion message to the lead:
 
@@ -232,3 +250,4 @@ SWEL and I have validated the plan.
 - **Enforce patterns.** All new code must follow the established patterns: 3-layer architecture, neverthrow Results, curried repository functions, Zod validation, companyId filtering everywhere.
 - **One schema_change ticket.** Even if there are multiple migrations, combine them into a single blocking ticket. Implementation tickets must wait for this.
 - **oRPC for new endpoints.** New API endpoints should use oRPC (`/orpc/*`), not Express (`/api/*`), unless there is a specific reason to use Express.
+- **Handle invalidated tickets.** If a user-requested architecture revision invalidates a previously created ticket, you MUST either (a) delete the ticket via `mcp__claude_ai_Linear__save_issue` with a cancelled state, or (b) update it with the revised approach. Confirm which action you took in your completion message to the lead.

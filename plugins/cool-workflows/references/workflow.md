@@ -193,6 +193,15 @@ EM ──SendMessage──> SWA               (technical blocker escalation)
 EM ──SendMessage──> SWEL              (implementation question escalation)
 ```
 
+### Message Acknowledgment Protocol
+
+When an agent receives a revision or high-priority message while working on other tasks, it MUST:
+1. Reply immediately with a brief acknowledgment: "Received [summary of message]. Processing now."
+2. Prioritize the revision over current work
+3. Send a completion message when the revision is applied
+
+The lead MUST NOT send multiple messages to the same agent in rapid succession. Instead, batch related instructions into a single message. If a follow-up is truly urgent, prefix the message with `[PRIORITY]` to signal it overrides current work.
+
 ---
 
 ## Key Constraints and Rules
@@ -202,6 +211,7 @@ EM ──SendMessage──> SWEL              (implementation question escalatio
 - **Figma MCP tools**: Use `mcp__plugin_figma_figma__*` for design context
 - **No Serena in worktrees**: Use native Read/Edit/Glob/Grep tools in implementation contexts
 - **Send messages, not text output**: Agents must use SendMessage to communicate — plain text output is not visible to other agents
+- **Ticket invalidation**: When an architecture revision invalidates an existing ticket, the responsible agent must either delete or update it and confirm the action in their completion message
 
 ### For Opus Agents (Lead, ProductMgr, SWA, SWEL)
 - Spawn subagents for exploration — don't explore the codebase yourself
